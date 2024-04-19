@@ -48,7 +48,7 @@ const Details = () => {
   console.log(chartdata);
 
   return (
-    <div className="p-0 m-0 w-full h-full flex bg-[url(pokiball-details.jpg)] bg-cover bg-center">
+    <div className="p-0 m-0 w-full h-full flex bg-[url(/pokiball-details.jpg)] bg-cover bg-center">
       <div
         className="flex w-1/2 h-full flex-col"
         style={{
