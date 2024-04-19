@@ -172,6 +172,7 @@ const PokeListWrapper = () => {
                 value={pokemoninput}
                 placeholder={undefined}
                 onChange={handleChangeWrapper}
+                autoComplete="off"
               ></Input>
               <ul className="cursor-pointer rounded-xl h-auto w-72 z-10 absolute top-44 bg-gradient-to-r from-purple-600 to-purple-900 text-white">
                 {suggestions && suggestions?.length > 0
