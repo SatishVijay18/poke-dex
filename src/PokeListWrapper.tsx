@@ -38,41 +38,41 @@ const PokeListWrapper = () => {
   // final array containing only names of types
   const pokemontypeslist = pokemontypestemp?.map((data) => data.name);
 
-  // useEffect(() => {
-  //   const fetchData = async (): Promise<void> => {
-  //     try {
-  //       const response = await fetch(
-  //         "https://pokeapi.co/api/v2/pokemon?limit=100",
-  //       );
-  //       const data = (await response.json()) as Pokemons;
+  useEffect(() => {
+    const fetchData = async (): Promise<void> => {
+      try {
+        const response = await fetch(
+          "https://pokeapi.co/api/v2/pokemon?limit=100",
+        );
+        const data = (await response.json()) as Pokemons;
 
-  //       const allPokemon: Pokemon[] = [];
+        const allPokemon: Pokemon[] = [];
 
-  //       for (const pokemon of data.results) {
-  //         const pokemonResponse = await fetch(pokemon.url as string);
-  //         const pokemonData = (await pokemonResponse.json()) as Pokidata;
+        for (const pokemon of data.results) {
+          const pokemonResponse = await fetch(pokemon.url as string);
+          const pokemonData = (await pokemonResponse.json()) as Pokidata;
 
-  //         const types: string[] = pokemonData.types.map(
-  //           (typeData) => typeData.type.name,
-  //         );
+          const types: string[] = pokemonData.types.map(
+            (typeData) => typeData.type.name,
+          );
 
-  //         allPokemon.push({
-  //           name: pokemonData.name,
-  //           types: types,
-  //           url: pokemon.url as string,
-  //           speciesurl: pokemonData.species.url,
-  //         });
-  //       }
+          allPokemon.push({
+            name: pokemonData.name,
+            types: types,
+            url: pokemon.url as string,
+            speciesurl: pokemonData.species.url,
+          });
+        }
 
-  //       setPokemonData(allPokemon);
-  //       setperpokemonData(allPokemon);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
+        setPokemonData(allPokemon);
+        setperpokemonData(allPokemon);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-  //   void fetchData();
-  // }, []);
+    void fetchData();
+  }, []);
 
   const [pokemoninput, setPokemonInput] = useState("");
   const [debounceTimer, setDebounceTimer] = useState<number | null>();
