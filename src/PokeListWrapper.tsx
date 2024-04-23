@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { Input } from "@material-tailwind/react";
 
 import PokiCard from "./components/PokiCard";
@@ -12,7 +14,13 @@ const PokeListWrapper = () => {
   const [perpokemonData, setperpokemonData] = useState<Pokemon[]>([]); // permanent copy of pokemon result
   const [suggestions, setSuggestions] = useState<string[] | null>([]); // filtered array for displaying as suggestions
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+
   const dropdownRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  // resetting the suggestions dropdown when clicking outside it
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -39,10 +47,13 @@ const PokeListWrapper = () => {
   const pokemontypeslist = pokemontypestemp?.map((data) => data.name);
 
   useEffect(() => {
+    if (loading) return;
+    setLoading(true);
     const fetchData = async (): Promise<void> => {
+      setLoading(true);
       try {
         const response = await fetch(
-          "https://pokeapi.co/api/v2/pokemon?limit=100",
+          `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${(currentPage - 1) * 20}}`,
         );
         const data = (await response.json()) as Pokemons;
 
@@ -64,15 +75,18 @@ const PokeListWrapper = () => {
           });
         }
 
-        setPokemonData(allPokemon);
-        setperpokemonData(allPokemon);
+        const newarray = perpokemonData.concat(allPokemon);
+        setPokemonData(newarray);
+        setperpokemonData(newarray);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     void fetchData();
-  }, []);
+  }, [currentPage]);
 
   const [pokemoninput, setPokemonInput] = useState("");
   const [debounceTimer, setDebounceTimer] = useState<number | null>();
@@ -127,8 +141,6 @@ const PokeListWrapper = () => {
             typeresultarr.push(temptype);
           }
         });
-
-        console.log(typeresultarr);
       }
 
       suggestionarr.push(...typeresultarr);
@@ -152,8 +164,27 @@ const PokeListWrapper = () => {
     debouncedcall(targetvalue);
   };
 
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      const target = entries[0];
+      if (target.isIntersecting) {
+        setCurrentPage((prevPage) => prevPage + 1);
+      }
+    });
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      if (containerRef.current) {
+        observer.unobserve(containerRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <div className="w-100 h-5/6 block ">
+    <div className="w-100 block ">
       <div className="h-1/5  align-middle items-center text-center bg-gradient-to-r from-purple-700 to-black">
         <form
           className="flex flex-col"
@@ -211,10 +242,13 @@ const PokeListWrapper = () => {
         </form>
       </div>
 
-      <div className="h-5/6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 ">
+      <div className="h-5/6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         {pokemonData.map((pokemondat: Pokemon, index: number) => {
           return <PokiCard pokemon={pokemondat} key={index} />;
         })}
+        {pokemoninput === "" ? (
+          <div ref={containerRef}>{loading && <div>Loading.....</div>}</div>
+        ) : null}
       </div>
     </div>
   );
