@@ -38,14 +38,12 @@ const Details = () => {
   const giflist = location?.state?.data?.pokidata?.sprites?.other?.showdown;
   const chartdata: ChartDataType[] = [];
   statlist.map((statitem) => {
-    console.log(statitem);
     chartdata.push({
       stat: statitem.stat.name,
       A: statitem.base_stat,
       maxval: 100,
     });
   });
-  console.log(chartdata);
 
   return (
     <div className="p-0 m-0 w-full h-full flex bg-[url(/pokiball-details.jpg)] bg-cover bg-center">
