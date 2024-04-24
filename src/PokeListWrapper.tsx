@@ -74,7 +74,6 @@ const PokeListWrapper = () => {
             speciesurl: pokemonData.species.url,
             pokidata: pokemonData,
           });
-          console.log(allPokemon);
         }
 
         const newarray = perpokemonData.concat(allPokemon);
