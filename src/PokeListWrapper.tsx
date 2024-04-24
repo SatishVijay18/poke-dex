@@ -72,6 +72,7 @@ const PokeListWrapper = () => {
             types: types,
             url: pokemon.url as string,
             speciesurl: pokemonData.species.url,
+            pokidata: pokemonData,
           });
         }
 
@@ -205,7 +206,7 @@ const PokeListWrapper = () => {
                 onChange={handleChangeWrapper}
                 autoComplete="off"
               ></Input>
-              <ul className="cursor-pointer rounded-xl h-auto w-72 z-10 absolute top-44 bg-gradient-to-r from-purple-600 to-purple-900 text-white">
+              <ul className="cursor-pointer rounded-xl h-auto w-72 z-10 absolute top-60 bg-gradient-to-r from-purple-600 to-purple-900 text-white">
                 {suggestions && suggestions?.length > 0
                   ? suggestions.map((suggestion, index) => {
                       if (pokemontypeslist?.includes(suggestion)) {

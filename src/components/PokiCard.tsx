@@ -1,18 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { FetchPokemonDetails } from "./FetchPokemonDetails";
-import { Pokemon, PokemonSpecies, Pokidata } from "../APIResponseTypes";
+import { Pokemon, PokemonSpecies } from "../APIResponseTypes";
 import { Link } from "react-router-dom";
 
 // types,  url, image, species url already sent
 
 const PokiCard = ({ pokemon }: { pokemon: Pokemon }) => {
-  const pokemonurl = pokemon.url;
-  const results = useQuery({
-    queryKey: ["pokemon-url", pokemonurl],
-    queryFn: FetchPokemonDetails,
-  });
-
-  const pokidata = (results?.data as Pokidata) ?? [];
+  const pokidata = pokemon.pokidata;
 
   const speciesurl = pokemon.speciesurl;
   const speciesresult = useQuery({

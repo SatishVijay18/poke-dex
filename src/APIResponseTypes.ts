@@ -4,6 +4,7 @@ export interface Pokemon {
   url: string;
   speciesurl:string;
   types: string[];
+  pokidata: Pokidata
 }
 
 
