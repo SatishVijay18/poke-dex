@@ -8,7 +8,7 @@ export const App = () => {
         <div className=" flex justify-center bg-gradient-to-r from-purple-700 to-black">
           <img
             className="flex h-48"
-            src="/header-logo-pub.png"
+            src="/header-logo.webp"
             alt="pokemon logo"
           />
         </div>
