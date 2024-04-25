@@ -1,6 +1,9 @@
 import { useLocation } from "react-router-dom";
-import { Pokidata } from "../APIResponseTypes";
+import { PokemonSpecies, Pokidata } from "../APIResponseTypes";
 import { Card, CardBody, Typography } from "@material-tailwind/react";
+
+import { useQuery } from "@tanstack/react-query";
+import { FetchPokemonDetails } from "./FetchPokemonDetails";
 
 import {
   Radar,
@@ -15,11 +18,7 @@ interface Location {
   state: {
     data: {
       pokidata: Pokidata;
-      base_happiness: string;
-      capture_rate: string;
-      shape: string;
-      growth_rate: string;
-      color: string;
+      speciesurl: string;
     };
   };
 }
@@ -36,6 +35,21 @@ const Details = () => {
     location?.state?.data?.pokidata?.sprites?.other?.home?.front_default;
   const statlist = location?.state?.data?.pokidata?.stats;
   const giflist = location?.state?.data?.pokidata?.sprites?.other?.showdown;
+
+  const speciesurl = location?.state?.data?.speciesurl;
+  const speciesresult = useQuery({
+    queryKey: ["pokemon-species", speciesurl],
+    queryFn: FetchPokemonDetails,
+  });
+
+  const derivedspecies = speciesresult?.data as PokemonSpecies;
+
+  const base_happiness = derivedspecies?.base_happiness;
+  const capture_rate = derivedspecies?.capture_rate;
+  const growth_rate = derivedspecies?.growth_rate?.name;
+  const shape = derivedspecies?.shape?.name;
+  const pokicolour = derivedspecies?.color?.name;
+
   const chartdata: ChartDataType[] = [];
   statlist.map((statitem) => {
     chartdata.push({
@@ -50,7 +64,7 @@ const Details = () => {
       <div
         className="flex w-1/2 h-full flex-col"
         style={{
-          backgroundImage: `linear-gradient(90deg, ${location?.state?.data?.color}, #00000000)`,
+          backgroundImage: `linear-gradient(90deg, ${pokicolour}, #00000000)`,
         }}
       >
         <h1 className="font-lobster text-6xl text-center pt-10 text-white">
@@ -109,7 +123,7 @@ const Details = () => {
                   Growth Rate
                 </Typography>
                 <Typography className="text-lg italic">
-                  {location?.state?.data?.growth_rate}
+                  {growth_rate}
                 </Typography>
               </CardBody>
             </Card>
@@ -120,7 +134,7 @@ const Details = () => {
                   Capture Rate
                 </Typography>
                 <Typography className="text-lg text-bold">
-                  {location?.state?.data?.capture_rate}
+                  {capture_rate}
                 </Typography>
               </CardBody>
             </Card>
@@ -132,7 +146,7 @@ const Details = () => {
                   Base Happiness
                 </Typography>
                 <Typography className="text-lg text-bold">
-                  {location?.state?.data?.base_happiness}
+                  {base_happiness}
                 </Typography>
               </CardBody>
             </Card>
@@ -142,9 +156,7 @@ const Details = () => {
                 <Typography className="text-xl text-bold font-pixelify">
                   Pokemon Shape
                 </Typography>
-                <Typography className="text-lg italic">
-                  {location?.state?.data?.shape}
-                </Typography>
+                <Typography className="text-lg italic">{shape}</Typography>
               </CardBody>
             </Card>
           </div>

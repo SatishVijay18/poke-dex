@@ -207,7 +207,7 @@ const PokeListWrapper = () => {
               <Input
                 className="flex justify-center"
                 name="pokiname"
-                color="white"
+                color="grey"
                 size="md"
                 label="Search"
                 value={pokemoninput}

@@ -1,43 +1,22 @@
-import { useQuery } from "@tanstack/react-query";
-import { FetchPokemonDetails } from "./FetchPokemonDetails";
-import { Pokemon, PokemonSpecies } from "../APIResponseTypes";
+import { Pokemon } from "../APIResponseTypes";
 import { Link } from "react-router-dom";
 
 // types,  url, image, species url already sent
 
 const PokiCard = ({ pokemon }: { pokemon: Pokemon }) => {
   const pokidata = pokemon.pokidata;
-
-  const speciesurl = pokemon.speciesurl;
-  const speciesresult = useQuery({
-    queryKey: ["pokemon-species", speciesurl],
-    queryFn: FetchPokemonDetails,
-  });
-
-  const derivedspecies = speciesresult?.data as PokemonSpecies;
-
   const pokimage = pokidata.sprites?.other?.dream_world?.front_default;
-  const pokicolour = derivedspecies?.color?.name;
   return (
     <Link
       to={{ pathname: "/details" }}
       state={{
         data: {
           pokidata: pokidata,
-          base_happiness: derivedspecies?.base_happiness,
-          capture_rate: derivedspecies?.capture_rate,
-          growth_rate: derivedspecies?.growth_rate?.name,
-          shape: derivedspecies?.shape?.name,
-          color: pokicolour,
+          speciesurl: pokidata.species.url,
         },
       }}
     >
-      <div
-        className="shadow-xl hover:shadow-2xl transition duration-300 hover:scale-90 rounded-xl flex flex-col m-1"
-        style={{
-          backgroundColor: `${pokicolour}`,
-        }}
-      >
+      <div className="shadow-xl hover:shadow-2xl transition duration-300 hover:scale-90 rounded-xl flex flex-col m-1">
         <img
           className="h-32 bottom-2 relative"
           alt="pokemon"
