@@ -191,7 +191,8 @@ const PokeListWrapper = () => {
 
   //back to top button toggle
   window.onscroll = () => {
-    scrollY > 0 ? setButtonToggle(true) : setButtonToggle(false);
+    if (scrollY > 0) setButtonToggle(true);
+    else if (buttontoggle) setButtonToggle(false);
   };
   return (
     <div className="w-100 block ">
@@ -207,7 +208,7 @@ const PokeListWrapper = () => {
               <Input
                 className="flex justify-center"
                 name="pokiname"
-                color="grey"
+                color="gray"
                 size="md"
                 label="Search"
                 value={pokemoninput}
